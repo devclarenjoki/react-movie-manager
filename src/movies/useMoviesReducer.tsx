@@ -10,34 +10,54 @@ interface MoviesState {
 }
 
 export function useMoviesReducer(): [MoviesState, React.Dispatch<MoviesAction>] {
-  // TODO: Implement all action processing
-
   const movieReducer = (state: MoviesState, action: MoviesAction): MoviesState => {
     switch (action.type) {
       case 'fetch':
-        return { ...state };
+        return { ...state, movies: action.payload.data, initialized: true  };
 
       case 'add':
-        return { ...state };
+        const newMovie = { ...action.payload.movie, id: uuid() };
+        return { ...state, 
+          // movies: [...state.movies, newMovie] 
+        // console.log(state. '')
+        };
 
       case 'delete':
-        return { ...state };
+        const filteredMovies = state.movies.filter(movie => movie.id !== action.payload.movieId);
+        return { ...state, movies: filteredMovies };
 
       case 'rate':
-        return { ...state };
+        const { movieId, rating } = action.payload;
+        const updatedMovies = state.movies.map(movie => {
+          if (movie.id === movieId) {
+            const updatedRatings = [...movie.ratings, rating];
+            const aggregateRating = updatedRatings.reduce((acc, curr) => acc + curr) / updatedRatings.length;
+            return { ...movie, ratings: updatedRatings, aggregateRating };
+          }
+          return movie;
+        });
+        return { ...state, movies: updatedMovies };
 
       default:
-        return state
+        return state;
     }
   };
 
-  const [state, dispatch] = useReducer(movieReducer, {
+  // Initial state for the movies reducer
+  const initialState: MoviesState = {
     movies: [],
-    initialized: false,
-  });
+    initialized: false
+  };
 
+  const [state, dispatch] = useReducer(movieReducer, initialState);
+
+  // Fetch movies when the component mounts
   useEffect(() => {
-    // TODO: Call fetch action
+    const fetchData = async () => {
+      const movies = await getMovies();
+      dispatch({ type: 'fetch', payload: { data: movies } });
+    };
+    fetchData();
   }, []);
 
   return [state, dispatch];

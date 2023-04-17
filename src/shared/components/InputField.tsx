@@ -4,7 +4,8 @@ interface InputFieldProps {
   name: string,
   value?: string,
   setter?: React.Dispatch<React.SetStateAction<string>>,
-  type?: string
+  type?: string,
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export function InputField({name, value, setter, type="text"}: InputFieldProps) {

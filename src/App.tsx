@@ -1,5 +1,6 @@
+import React from 'react';
+// import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import './App.css';
-
 import { Header } from './shared/components';
 import { MovieList } from './movies/components';
 import { MovieProvider } from 'movies/components/MovieProvider';
