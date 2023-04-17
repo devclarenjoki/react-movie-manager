@@ -20,7 +20,7 @@ export const MovieList = () => {
     setDisplayOptionType('BUTTON');
   };
 
-  const handleMovieAdded = (movie: Movie) => {
+  const handleMovieAdded = (movie: Omit<Movie, "id" | "ratings">) => {
     moviesDispatch({ type: 'add', payload: { movie } });
     setDisplayOptionType('BUTTON');
   };
@@ -38,10 +38,10 @@ export const MovieList = () => {
         </Card>
       ) : (
         <Card>
-          {/* <AddMovieForm
+          <AddMovieForm
             onCancel={handleCancelAddMovie}
-            onSubmit={}
-          /> */}
+            onSubmit={handleMovieAdded}
+          />
         </Card>
       )}
     </div>
